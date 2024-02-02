@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form Validation</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            padding: 50px;
+            background-color: #f2f2f2;
+            margin: 0;
+        }
+        .error {
+            color: red;
+            margin-left: 5px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Form Validation</h1>
+
+    <form id="registrationForm">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required>
+        <span class="error" id="nameError"></span>
+        <br>
+
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required>
+        <span class="error" id="emailError"></span>
+        <br>
+
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required>
+        <span class="error" id="passwordError"></span>
+        <br>
+
+        <label for="phone">Phone Number:</label>
+        <input type="text" id="phone" name="phone" required>
+        <span class="error" id="phoneError"></span>
+        <br>
+
+        <label for="dob">Date of Birth:</label>
+        <input type="date" id="dob" name="dob" required>
+        <span class="error" id="dobError"></span>
+        <br>
+
+        <button type="button" onclick="validateForm()">Submit</button>
+    </form>
+
+    <div id="result"></div>
+
+    <script>
+        function validateForm() {
+            const nameRegex = /^[a-zA-Z]{3,}$/;
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+            const phoneRegex = /^\d{10}$/;
+
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const phone = document.getElementById('phone').value;
+            const dob = document.getElementById('dob').value;
+
+            displayError('nameError', !nameRegex.test(name), 'The name field should contain at least 3 alphabets, ensure it does not contain numerics or special characters.');
+            displayError('emailError', !emailRegex.test(email), 'The email field should validate that the input is in the format username@domain.extension.');
+            displayError('passwordError', !passwordRegex.test(password), 'Password must be at least 8 characters long and contain at least 1 uppercase letter, 1 lowercase letter, 1 number, and 1 special character.');
+            displayError('phoneError', !phoneRegex.test(phone), 'Phone number must be numeric and 10 digits long.');
+            displayError('dobError', dob === '', 'Date of Birth is required.');
+
+            const resultElement = document.getElementById('result');
+            resultElement.innerHTML = ''; 
+
+            const errors = document.querySelectorAll('.error');
+            for (const error of errors) {
+                if (error.textContent !== '') {
+                    resultElement.innerHTML = 'Form not submitted, please retry.';
+                    return;
+                }
+            }
+
+            resultElement.innerHTML = 'Form submitted successfully!';
+        }
+
+        function displayError(elementId, condition, message) {
+            const errorElement = document.getElementById(elementId);
+            errorElement.textContent = condition ? message : '';
+        }
+    </script>
+</body>
+</html>
